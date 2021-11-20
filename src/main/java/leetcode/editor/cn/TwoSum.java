@@ -51,6 +51,10 @@ public class TwoSum {
     public static void main(String[] args) {
         Solution solution = new TwoSum().new Solution();
 
+        // 1
+        // 2
+        // 3
+        // 4
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
