@@ -41,7 +41,11 @@ package leetcode.editor.cn;
 // 
 // Related Topics 递归 链表 数学 👍 7453 👎 0
 
+
 public class AddTwoNumbers {
+
+    static final int MAXIMUM_CAPACITY = 1 << 30;
+
     public static void main(String[] args) {
         Solution solution = new AddTwoNumbers().new Solution();
         ListNode a = new ListNode(2);
@@ -52,6 +56,18 @@ public class AddTwoNumbers {
         b.next.next = new ListNode(4);
         ListNode listNode = solution.addTwoNumbers(a, b);
         System.out.println(listNode.toString());
+
+        System.out.println(tableSizeFor(33));
+    }
+
+    static final int tableSizeFor(int cap) {
+        int n = cap - 1;
+        n |= n >>> 1;
+        n |= n >>> 2;
+        n |= n >>> 4;
+        n |= n >>> 8;
+        n |= n >>> 16;
+        return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
 
 //leetcode submit region begin(Prohibit modification and deletion)
