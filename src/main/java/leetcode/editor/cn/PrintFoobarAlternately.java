@@ -54,7 +54,10 @@ package leetcode.editor.cn;
 // 
 // Related Topics 多线程 👍 142 👎 0
 
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class PrintFoobarAlternately {
     public static void main(String[] args) {
@@ -71,31 +74,155 @@ public class PrintFoobarAlternately {
 
     class FooBar {
         private int n;
+        // 信号量
         private Semaphore foo_semaphore = new Semaphore(1);
         private Semaphore bar_semaphore = new Semaphore(0);
+
+        // 阻塞队列
+        private BlockingQueue<Integer> foo = new LinkedBlockingQueue<Integer>(1);
+        private BlockingQueue<Integer> bar = new LinkedBlockingQueue<Integer>(1);
+
+        // CyclicBarrier 控制先后
+        CyclicBarrier cb = new CyclicBarrier(2);
+        volatile boolean fin = true;
+
+        // 自旋 + 让出CPU
+        volatile boolean permitFoo = true;
+
+        // 可重入锁 + Condition
+        Lock lock = new ReentrantLock(true);
+        private final Condition fooCondition = lock.newCondition();
+        volatile boolean flag = true;
+
+        // synchronized + 标志位 + 唤醒
+        // 标志位，控制执行顺序，true执行printFoo，false执行printBar
+        private volatile boolean type = true;
+        // 锁标志
+        private final Object fooObject = new Object();
+
 
         public FooBar(int n) {
             this.n = n;
         }
 
         public void foo(Runnable printFoo) throws InterruptedException {
-
             for (int i = 0; i < n; i++) {
                 foo_semaphore.acquire();
-                // printFoo.run() outputs "foo". Do not change or remove this line.
                 printFoo.run();
                 bar_semaphore.release();
             }
+
+            for (int i = 0; i < n; i++) {
+                foo.put(i);
+                printFoo.run();
+                bar.put(i);
+            }
+
+            for (int i = 0; i < n; i++) {
+                while (!fin) {
+                }
+                printFoo.run();
+                fin = false;
+                try {
+                    cb.await();
+                } catch (BrokenBarrierException e) {
+                }
+            }
+
+            for (int i = 0; i < n; ) {
+                if (permitFoo) {
+                    printFoo.run();
+                    i++;
+                    permitFoo = false;
+                } else {
+                    Thread.yield();
+                }
+            }
+
+            for (int i = 0; i < n; i++) {
+                lock.lock();
+                try {
+                    while (!flag) {
+                        fooCondition.await();
+                    }
+                    printFoo.run();
+                    flag = false;
+                    fooCondition.signal();
+                } finally {
+                    lock.unlock();
+                }
+            }
+
+            for (int i = 0; i < n; i++) {
+                synchronized (fooObject) {
+                    while (!type) {
+                        fooObject.wait();
+                    }
+                    printFoo.run();
+                    type = false;
+                    fooObject.notifyAll();
+                }
+            }
+
         }
 
         public void bar(Runnable printBar) throws InterruptedException {
-
             for (int i = 0; i < n; i++) {
                 bar_semaphore.acquire();
-                // printBar.run() outputs "bar". Do not change or remove this line.
                 printBar.run();
                 foo_semaphore.release();
             }
+
+            for (int i = 0; i < n; i++) {
+                bar.take();
+                printBar.run();
+                foo.take();
+            }
+
+            for (int i = 0; i < n; i++) {
+                try {
+                    cb.await();
+                } catch (BrokenBarrierException e) {
+                }
+                printBar.run();
+                fin = true;
+            }
+
+            for (int i = 0; i < n; ) {
+                if (!permitFoo) {
+                    printBar.run();
+                    i++;
+                    permitFoo = true;
+                } else {
+                    Thread.yield();
+                }
+            }
+
+            for (int i = 0; i < n; i++) {
+                lock.lock();
+                try {
+                    while (flag) {
+                        fooCondition.await();
+                    }
+                    printBar.run();
+                    flag = true;
+                    fooCondition.signal();
+                } finally {
+                    lock.unlock();
+                }
+            }
+
+            for (int i = 0; i < n; i++) {
+                synchronized (fooObject) {
+                    while (type) {
+                        fooObject.wait();
+                    }
+                    printBar.run();
+                    type = true;
+                    fooObject.notifyAll();
+                }
+            }
+
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
