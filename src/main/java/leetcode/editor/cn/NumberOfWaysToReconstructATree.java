@@ -73,6 +73,7 @@ public class NumberOfWaysToReconstructATree {
     
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+        // todo
     public int checkWays(int[][] pairs) {
         return 0;
     }
