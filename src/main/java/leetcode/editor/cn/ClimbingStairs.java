@@ -41,15 +41,15 @@ public class ClimbingStairs {
     class Solution {
         public int climbStairs(int n) {
             // f(x)=f(x−1)+f(x−2)
-            int tmp;
-            int f_0 = 0, f_1 = 1;
+            int f_1 = 0, f_2 = 0;
+            int f_x = 1;
             for (int i = 1; i <= n; i++) {
-                tmp = f_0;
-                f_0 = f_1;
-                f_1 = f_0 + tmp;
+                f_1 = f_2;
+                f_2 = f_x;
+                f_x = f_1 + f_2;
             }
 
-            return f_1;
+            return f_x;
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
