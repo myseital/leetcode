@@ -19,11 +19,7 @@ package leetcode.editor.cn;
 // Related Topics 树 深度优先搜索 广度优先搜索 二叉树 👍 1107 👎 0
 
 public class MaximumDepthOfBinaryTree {
-    public static void main(String[] args) {
-        Solution solution = new MaximumDepthOfBinaryTree().new Solution();
-        
-    }
-    
+
 //leetcode submit region begin(Prohibit modification and deletion)
 /**
  * Definition for a binary tree node.
