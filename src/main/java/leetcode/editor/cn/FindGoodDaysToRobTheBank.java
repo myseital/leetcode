@@ -69,12 +69,14 @@ package leetcode.editor.cn;
 // 
 // Related Topics 数组 动态规划 前缀和 👍 89 👎 0
 
+import java.util.List;
+
 public class FindGoodDaysToRobTheBank {
     
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public List<Integer> goodDaysToRobBank(int[] security, int time) {
-
+        return null;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

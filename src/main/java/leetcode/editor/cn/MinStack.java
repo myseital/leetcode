@@ -52,8 +52,6 @@ import java.util.LinkedList;
 public class MinStack {
     
 //leetcode submit region begin(Prohibit modification and deletion)
-class MinStack {
-
     Deque<Integer> xStack;
     Deque<Integer> minStack;
 
@@ -91,5 +89,3 @@ class MinStack {
  * int param_4 = obj.getMin();
  */
 //leetcode submit region end(Prohibit modification and deletion)
-
-}
