@@ -58,10 +58,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class BinaryTreeInorderTraversal {
-    public static void main(String[] args) {
-        Solution solution = new BinaryTreeInorderTraversal().new Solution();
-
-    }
 
 //leetcode submit region begin(Prohibit modification and deletion)
 
