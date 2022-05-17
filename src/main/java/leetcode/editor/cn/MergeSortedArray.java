@@ -61,7 +61,7 @@ public class MergeSortedArray {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    public void merge(int[] nums1, int m, int[] nums2, int n) {
+    public void MergeSortedArray(int[] nums1, int m, int[] nums2, int n) {
         int p1 = 0, p2 = 0;
         int[] sorted = new int[m + n];
         int cur;
@@ -83,7 +83,7 @@ class Solution {
     }
 
 
-    public void merge1(int[] nums1, int m, int[] nums2, int n) {
+    public void MergeSortedArray2(int[] nums1, int m, int[] nums2, int n) {
         for (int i = 0; i != n; ++i) {
             nums1[m + i] = nums2[i];
         }
