@@ -28,6 +28,7 @@ package leetcode.editor.cn;
 // 
 // Related Topics 数组 哈希表 分治 计数 排序 👍 1380 👎 0
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,68 @@ public class MajorityElement {
     
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+
+    // Boyer-Moore 投票算法
     public int majorityElement(int[] nums) {
+        int count = 0;
+        Integer candidate = null;
+
+        for (int num : nums) {
+            if (count == 0) {
+                candidate = num;
+            }
+            count += (num == candidate) ? 1 : -1;
+        }
+
+        return candidate;
+    }
+
+    // 分治
+    public int majorityElement2(int[] nums) {
+        return majorityElementRec(nums, 0, nums.length - 1);
+    }
+
+    private int majorityElementRec(int[] nums, int lo, int hi) {
+        // base case; the only element in an array of size 1 is the majority
+        // element.
+        if (lo == hi) {
+            return nums[lo];
+        }
+
+        // recurse on left and right halves of this slice.
+        int mid = (hi - lo) / 2 + lo;
+        int left = majorityElementRec(nums, lo, mid);
+        int right = majorityElementRec(nums, mid + 1, hi);
+
+        // if the two halves agree on the majority element, return it.
+        if (left == right) {
+            return left;
+        }
+
+        // otherwise, count each element and return the "winner".
+        int leftCount = countInRange(nums, left, lo, hi);
+        int rightCount = countInRange(nums, right, lo, hi);
+
+        return leftCount > rightCount ? left : right;
+    }
+
+    private int countInRange(int[] nums, int num, int lo, int hi) {
+        int count = 0;
+        for (int i = lo; i <= hi; i++) {
+            if (nums[i] == num) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    // 排序取中位数
+    public int majorityElement1(int[] nums) {
+        Arrays.sort(nums);
+        return nums[nums.length / 2];
+    }
+
+    public int majorityElement0(int[] nums) {
         Map<Integer, Integer> data = new HashMap<>();
         for (int num : nums) {
             if (!data.containsKey(num)) {

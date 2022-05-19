@@ -49,9 +49,9 @@ package leetcode.editor.cn;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public class MinStack {
-    
 //leetcode submit region begin(Prohibit modification and deletion)
+public class MinStack {
+
     Deque<Integer> xStack;
     Deque<Integer> minStack;
 
@@ -60,21 +60,21 @@ public class MinStack {
         minStack = new LinkedList<Integer>();
         minStack.push(Integer.MAX_VALUE);
     }
-    
+
     public void push(int val) {
         xStack.push(val);
         minStack.push(Math.min(minStack.peek(), val));
     }
-    
+
     public void pop() {
         xStack.pop();
         minStack.pop();
     }
-    
+
     public int top() {
         return xStack.peek();
     }
-    
+
     public int getMin() {
         return minStack.peek();
     }
