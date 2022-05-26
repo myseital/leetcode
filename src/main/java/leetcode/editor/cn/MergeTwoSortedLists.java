@@ -50,7 +50,28 @@ public class MergeTwoSortedLists {
  * }
  */
 class Solution {
+
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode preHead = new ListNode(-1);
+        ListNode data = preHead;
+        while (list1 != null && list2 != null) {
+            if (list1.val <= list2.val) {
+                data.next = list1;
+                list1 = list1.next;
+            } else {
+                data.next = list2;
+                list2 = list2.next;
+            }
+
+            data = data.next;
+        }
+
+        data.next = list1 == null ? list2 : list1;
+
+        return preHead.next;
+    }
+
+    public ListNode mergeTwoLists1(ListNode list1, ListNode list2) {
         if (list1 == null) {
             return list2;
         }

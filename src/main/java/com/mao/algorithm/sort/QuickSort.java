@@ -1,6 +1,7 @@
 package com.mao.algorithm.sort;
 
 import java.util.Arrays;
+import java.util.Stack;
 
 /**
  * 快速排序 (二分排序)（Quick Sort）算法和冒泡排序算法类似，
@@ -18,30 +19,52 @@ public class QuickSort {
     public static void main(String[] args) {
         int[] quickNums = {18, 1, 6, 27, 15};
         System.out.println("排序前：" + Arrays.toString(quickNums));
-        quickSort(quickNums, 0, quickNums.length - 1);
+        sortArray(quickNums);
+//        quickSort(quickNums, 0, quickNums.length - 1);
         System.out.println("排序后：" + Arrays.toString(quickNums));
     }
 
-
-    public static void quickSort(int[] arr){
-        qsort(arr, 0, arr.length-1);
-    }
-    private static void qsort(int[] arr, int low, int high){
+    private static void quickSort(int[] arr, int low, int high) {
         if (low >= high)
             return;
         //将数组分为两部分
         int pivot = partition(arr, low, high);
         //递归排序左子数组
-        qsort(arr, low, pivot-1);
+        quickSort(arr, low, pivot - 1);
         //递归排序右子数组
-        qsort(arr, pivot+1, high);
+        quickSort(arr, pivot + 1, high);
     }
-    private static int partition(int[] arr, int low, int high){
-        int pivot = arr[low];     //基准
-        while (low < high){
+
+    public static void sortArray(int[] nums) {
+        int start = 0;
+        int end = nums.length - 1;
+        Stack<Integer> stack = new Stack<>();
+        if (start < end) {
+            stack.push(end);
+            stack.push(start);
+            while (!stack.isEmpty()) {
+                int l = stack.pop();
+                int r = stack.pop();
+                int index = partition(nums, l, r);
+                if (l < index - 1) {
+                    stack.push(index - 1);
+                    stack.push(l);
+                }
+                if (r > index + 1) {
+                    stack.push(r);
+                    stack.push(index + 1);
+                }
+            }
+        }
+    }
+
+    private static int partition(int[] arr, int low, int high) {
+        //基准
+        int pivot = arr[low];
+        while (low < high) {
             while (low < high && arr[high] >= pivot) --high;
             //交换比基准大的记录到左端
-            arr[low]=arr[high];
+            arr[low] = arr[high];
             while (low < high && arr[low] <= pivot) ++low;
             //交换比基准小的记录到右端
             arr[high] = arr[low];
@@ -50,76 +73,5 @@ public class QuickSort {
         arr[low] = pivot;
         //返回的是基准的位置
         return low;
-    }
-
-
-    public static void quickSort(int[] arr, int start, int end) {
-        //直到start=end时结束递归
-        if (start >= end) {
-            return;
-        }
-        int left = start;
-        int right = end;
-        // 基准数
-        int baseval = arr[start];
-        while (left < right) {
-            // 从右向左找比基准数小的数
-            while (left < right && arr[right] > baseval) {
-                right--;
-            }
-            arr[left] = arr[right];
-            left++;
-
-            // 从左向右找比基准数大的数
-            while (left < right && arr[left] <= baseval) {
-                left++;
-            }
-            arr[right] = arr[left];
-            right--;
-        }
-        // 把基准数放到i的位置
-        arr[left] = baseval;
-        System.out.println(Arrays.toString(arr));
-        // 递归
-        quickSort(arr, start, left - 1);
-        quickSort(arr, left + 1, end);
-    }
-
-    private static void quickSort1(int[] nums, int left, int right) {
-        int f, t;
-        int ltemp = left;
-        int rtemp = right;
-        // 分界值
-        f = nums[(left + right) / 2];
-        while (ltemp < rtemp) {
-            while (nums[ltemp] < f) {
-                ++ltemp;
-            }
-            while (nums[rtemp] > f) {
-                --rtemp;
-            }
-            if (ltemp <= rtemp) {
-                t = nums[ltemp];
-                nums[ltemp] = nums[rtemp];
-                nums[rtemp] = t;
-                --rtemp;
-                ++ltemp;
-            }
-        }
-
-        System.out.println(Arrays.toString(nums));
-
-
-        if (ltemp == rtemp) {
-            ltemp++;
-        }
-        if (left < rtemp) {
-            // 递归调用
-            quickSort1(nums, left, ltemp - 1);
-        }
-        if (right > ltemp) {
-            // 递归调用
-            quickSort1(nums, rtemp + 1, right);
-        }
     }
 }
