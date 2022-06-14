@@ -63,7 +63,25 @@ class Solution {
         this.ans = null;
     }
 
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+
+    public TreeNode lowestCommonAncestor(TreeNode cur, TreeNode p, TreeNode q) {
+        if (cur == null || cur == p || cur == q)
+            return cur;
+        TreeNode left = lowestCommonAncestor(cur.left, p, q);
+        TreeNode right = lowestCommonAncestor(cur.right, p, q);
+        //如果left为空，说明这两个节点在cur结点的右子树上，我们只需要返回右子树查找的结果即可
+        if (left == null)
+            return right;
+        //同上
+        if (right == null)
+            return left;
+        //如果left和right都不为空，说明这两个节点一个在cur的左子树上一个在cur的右子树上，
+        //我们只需要返回cur结点即可。
+        return cur;
+    }
+
+
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
         dfs(root, p, q);
         return ans;
     }
@@ -81,7 +99,6 @@ class Solution {
         // 左子树或者右子树均包含 p 节点或 q 节点 或者节点节点值等于 p 或者 q
         return lson || rson || (root.val == p.val || root.val == q.val);
     }
-
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
