@@ -33,6 +33,32 @@ public class LongestPalindromicSubstring {
     
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    // 暴力解法
+    public String longestPalindrome2(String s) {
+        String ans = "";
+        int max = 0;
+        int len = s.length();
+        for (int i = 0; i < len; i++)
+            for (int j = i + 1; j <= len; j++) {
+                String test = s.substring(i, j);
+                if (isPalindromic(test) && test.length() > max) {
+                    ans = s.substring(i, j);
+                    max = Math.max(max, ans.length());
+                }
+            }
+        return ans;
+    }
+
+    public boolean isPalindromic(String s) {
+        int len = s.length();
+        for (int i = 0; i < len / 2; i++) {
+            if (s.charAt(i) != s.charAt(len - i - 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // 动态规划
     public String longestPalindrome(String s) {
         int len = s.length();
@@ -55,7 +81,7 @@ class Solution {
             // 枚举左边界，左边界的上限设置可以宽松一些
             for (int i = 0; i < len; i++) {
                 // 由 L 和 i 可以确定右边界，即 j - i + 1 = L 得
-                int j = L + i - 1;
+                int j = i + L - 1;
                 // 如果右边界越界，就可以退出当前循环
                 if (j >= len) {
                     break;

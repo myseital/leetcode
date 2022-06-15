@@ -59,6 +59,7 @@ class Solution {
         ListNode hair = new ListNode(-1);
         hair.next = head;
         ListNode pre = hair;
+
         while (head != null) {
             ListNode tail = pre;
             // 查看剩余部分长度是否大于等于 k

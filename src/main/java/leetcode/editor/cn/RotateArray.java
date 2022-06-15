@@ -56,6 +56,17 @@ public class RotateArray {
 class Solution {
 
     public void rotate(int[] nums, int k) {
+        int length = nums.length;
+        int[] data = new int[length];
+        for (int i = 0; i < length; i++) {
+            data[(i + k) % length] = nums[i];
+        }
+        for (int i = 0; i < length; i++) {
+            nums[i] = data[i];
+        }
+    }
+
+    public void rotate3(int[] nums, int k) {
         k %= nums.length;
         reverse(nums, 0, nums.length - 1);
         reverse(nums, 0, k - 1);
